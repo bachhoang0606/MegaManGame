@@ -22,7 +22,10 @@ public class CacheDataLoader {
     
     private String framefile = "data/frame.txt";
     private String animationfile = "data/animation.txt";
+    private String physmapfile = "data/phys_map.txt";
     
+    // Mảng chứa các khung vật lý map
+    private int[][] phys_map;
     
     // Dữ liệu kiểu từ điển
     private Hashtable<String, FrameImage> frameImages;
@@ -33,6 +36,11 @@ public class CacheDataLoader {
     public void loadData() throws IOException{
         loadFrame();
         loadAnimation();
+        loadPhysMap();
+    }
+     
+    public int[][] getPhysicalMap(){
+        return instance.phys_map;
     }
     
     public static CacheDataLoader getInstance(){
@@ -158,5 +166,41 @@ public class CacheDataLoader {
                 }
             }
         }
+    }
+    
+    public void loadPhysMap() throws IOException{ 
+        
+        FileReader fr = new FileReader(physmapfile);
+        BufferedReader br = new BufferedReader(fr);
+        
+        String line= null;
+        
+        line = br.readLine();
+        int numberOfRows = Integer.parseInt(line);
+        line = br.readLine();
+        int numberOfColumns= Integer.parseInt(line);
+        
+        instance.phys_map = new int[numberOfRows][numberOfColumns];
+        
+        for(int i = 0; i < numberOfRows; i++){
+            
+            line = br.readLine();
+            String[] str = line.split(" ");
+            
+            for(int j = 0; j < numberOfColumns; j++){
+                instance.phys_map[i][j] = Integer.parseInt(str[j]);
+            }
+        }
+        
+        for(int i = 0; i < numberOfRows; i++){
+            
+            for(int j = 0; j < numberOfColumns; j++){
+                System.out.print(" "+ instance.phys_map[i][j]);
+            }
+            
+            System.out.println();
+        }
+        
+        br.close();
     }
 }

@@ -68,6 +68,6 @@ public class FrameImage {
     }
 
     public void setImage(BufferedImage image) {
-        this.image = image; //21:11
+        this.image = image; 
     }
 }

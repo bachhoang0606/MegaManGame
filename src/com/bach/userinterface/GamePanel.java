@@ -7,6 +7,9 @@ package com.bach.userinterface;
 import com.bach.effect.Animation;
 import com.bach.effect.CacheDataLoader;
 import com.bach.effect.FrameImage;
+import com.bach.gameobject.GameWorld;
+import com.bach.gameobject.Megaman;
+import com.bach.gameobject.PhysicalMap;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -42,6 +45,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
     private Graphics2D bufG2D;
     
     
+    //Megaman megaman = new Megaman(300, 300, 100, 100, 0.1f);
+    //PhysicalMap physcalMap = new PhysicalMap(0,0);
+    GameWorld gameWorld;
+    
     //FrameImage frame1, frame2, frame3;
     //Animation anim;
     // object image in java
@@ -50,7 +57,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
     
     public GamePanel(){
         
-        inputManger = new InputManger();
+        gameWorld = new GameWorld();
+        inputManger = new InputManger(gameWorld);
         
         // TYPE_INT_ARGB Chế độ 3 màu chính
         bufImage = new BufferedImage(GameFrame.SCREEN_WIDTH, GameFrame.SCREEN_HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -86,6 +94,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
         
         g.drawImage(bufImage, 0, 0, this);
         
+        
         // Ép kiểu
         //Graphics2D g2 = (Graphics2D) g;
         
@@ -97,6 +106,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
         //g.drawImage(img, WIDTH, WIDTH, this);
     }
 
+    public void updateGame(){
+        //megaman.update();
+        gameWorld.Update();
+    }
+    
     // Vẽ lên bufImage dùng với ký thuật vẽ đệm
     public void RenderGame(){
         if(bufImage == null){
@@ -110,6 +124,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
         if(bufG2D != null){
             bufG2D.setColor(Color.WHITE);
             bufG2D.fillRect(0, 0, GameFrame.SCREEN_WIDTH, GameFrame.SCREEN_HEIGHT);
+            
+            // draw ame here
+            //megaman.draw(bufG2D);
+            //physcalMap.draw(bufG2D);
+            gameWorld.Render(bufG2D);
         }
     }
     // khởi động threfad để khỏi động run
@@ -124,10 +143,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
     @Override
     public void run() {
         // Frame per second
-        long FPS = 80;
+        long FPS = 60;
         
         // chu kỳ đơn vị nano time
-        long period = 1000*100000/FPS; 
+        long period = 1000*1000000/FPS; 
         
         // thời gian bắt đầu chu kỳ
         long beginTime;
@@ -147,11 +166,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener{
             //System.out.println("a = " + a++);
 
             // Update game
+            updateGame();
             // Render game
             //anim.Update(System.nanoTime());
             
             RenderGame();
-            repaint();
+            
             // Repain call pain method
             repaint();
             
