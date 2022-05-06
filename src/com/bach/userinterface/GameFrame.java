@@ -4,8 +4,12 @@
  */
 package com.bach.userinterface;
 
+import com.bach.effect.CacheDataLoader;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 /**
@@ -32,7 +36,14 @@ public class GameFrame extends JFrame {
         
         // x, y is location, width, height is game frame  size
         this.setBounds((dimension.width - SCREEN_WIDTH)/2,(dimension.height - SCREEN_HEIGHT)/2, SCREEN_WIDTH, SCREEN_HEIGHT);
-    
+        
+        try {
+            CacheDataLoader.getInstance().loadData();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        
+        
         gamePanel = new GamePanel();
         add(gamePanel);
         

@@ -18,6 +18,11 @@ public class FrameImage {
     // object image in java
     private BufferedImage image;
     
+    public FrameImage(){
+        this.name = null;
+        this.image = null;
+    }
+    
     public FrameImage(String name, BufferedImage image){
         this.name = name;
         this.image = image;
